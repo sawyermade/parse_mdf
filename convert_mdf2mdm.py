@@ -13,7 +13,7 @@ def plot_tables(table_dict):
 		print(f'Table Count Group: {table_count}\nNumber of Tables: {len(table_list)}')
 		for i, table in enumerate(table_list):
 			# Prints tabel count and table number
-			print(f'Table #: {i+1}')
+			# print(f'Table #: {i+1}')
 
 			# Plots Vout vs Iout NQ
 			x_l, y_l = 'Vout_NQ(real)', 'Iout_NQ(real)'
