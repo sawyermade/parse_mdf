@@ -6,7 +6,6 @@ def save_json(table_dict):
 	# Converts to lists
 	new_table_dict = {}
 	for table_count, table_list in table_dict.items():
-		# new_table_dict.update({table_count : [table.tolist() for table in table_list]})
 		new_table_dict.update({table_count : table_list.tolist()})
 
 	# Saves json
@@ -24,9 +23,6 @@ def plot_tables(table_dict):
 		# Goes through each table in table_count table_list
 		print(f'Table Count Group: {table_count}\nNumber of Tables: {len(table_list)}')
 		for i, table in enumerate(table_list):
-			# Prints tabel count and table number
-			# print(f'Table #: {i+1}')
-
 			# Plots Vout vs Iout NQ
 			x_l, y_l = 'Vout_NQ(real)', 'Iout_NQ(real)'
 			x_i, y_i = 0, 2
