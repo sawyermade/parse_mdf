@@ -1,5 +1,17 @@
 import os, sys, argparse, numpy as np, matplotlib
 import matplotlib.pyplot as plt
+import json
+
+def save_json(table_dict):
+	# Converts to lists
+	new_table_dict = {}
+	for table_count, table_list in table_dict.items():
+		# new_table_dict.update({table_count : [table.tolist() for table in table_list]})
+		new_table_dict.update({table_count : table_list.tolist()})
+
+	# Saves json
+	with open('tables.json', 'w') as jf:
+		json.dump(new_table_dict, jf, indent=4, sort_keys=True)
 
 def plot_tables(table_dict):
 	# Checks if output folger exists
@@ -69,11 +81,14 @@ def parse_mdf(mdf_path):
 					table_vals_list.append(line_vals)
 					count += 1
 				
-				# print(f'table has {count} rows')
 				# Adds table to table dict
 				if str(count) not in table_dict.keys():
 					table_dict.update({str(count) : []})
 				table_dict[str(count)].append(np.asarray(table_vals_list))
+
+		# Converts all to np arrays
+		for table_count, table_list in table_dict.items():
+			table_dict[table_count] = np.asarray(table_dict[table_count])
 
 		# Table dict
 		return table_dict
@@ -91,6 +106,7 @@ def main():
 	# Parses mdf file to np arrays
 	table_dict = parse_mdf(args.input)
 	plot_tables(table_dict)
+	save_json(table_dict)
 
 if __name__ == '__main__':
 	main()
