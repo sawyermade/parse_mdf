@@ -1,0 +1,143 @@
+! VERSION = 6.00
+BEGIN_HEADER
+ ICCAP_INPUTS
+  vd         V  D GROUND SMU1 0.03 LIN        2    0.5        3          6    0.5       
+  vg         V  G GROUND SMU2 0.01 LIN        1    0.15       0.9        11   0.075     
+  vs         V  S GROUND GND 0 CON        0
+  vb         V  B GROUND GND 0 CON        0
+ ICCAP_OUTPUTS
+  id         I  D GROUND SMU1 B
+  ig         I  G GROUND SMU2 B
+ ICCAP_VALUES
+  W "100u"
+  L "0.24u"
+  RcontactDC "1"
+  Rtotalport1 "1"
+  Rtotalport2 "1"
+  TEMP "27"
+  TNOM "27.00"
+  TIMEDATE ""
+  OPERATOR ""
+  TECHNO "myTechno"
+  LOT "myLot"
+  WAFER "myWafer"
+  CHIP "myChip"
+  MODULE "myModule"
+  DEV_NAME "myDevice"
+  REMARKS "my Notes"
+END_HEADER
+
+BEGIN_DB
+ ICCAP_VAR vd         0.5            
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  9.18751e-12           0                    
+  0.225                 8.10819e-11           0                    
+  0.3                   7.6477e-10            0                    
+  0.375                 7.24275e-09           0                    
+  0.45                  6.79496e-08           0                    
+  0.525                 6.18956e-07           0                    
+  0.6                   5.22559e-06           0                    
+  0.675                 3.813e-05             0                    
+  0.75                  0.000226346           0                    
+  0.825                 0.000946624           0                    
+  0.9                   0.00255671            0                    
+END_DB
+
+BEGIN_DB
+ ICCAP_VAR vd         1              
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  1.1354e-11            0                    
+  0.225                 9.74491e-11           0                    
+  0.3                   9.16181e-10           0                    
+  0.375                 8.67369e-09           0                    
+  0.45                  8.13705e-08           0                    
+  0.525                 7.41133e-07           0                    
+  0.6                   6.25215e-06           0                    
+  0.675                 4.53992e-05           0                    
+  0.75                  0.000265058           0                    
+  0.825                 0.00108155            0                    
+  0.9                   0.00286794            0                    
+END_DB
+
+BEGIN_DB
+ ICCAP_VAR vd         1.5            
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  1.34976e-11           0                    
+  0.225                 1.13599e-10           0                    
+  0.3                   1.06552e-09           0                    
+  0.375                 1.0085e-08            0                    
+  0.45                  9.46072e-08           0                    
+  0.525                 8.61626e-07           0                    
+  0.6                   7.26412e-06           0                    
+  0.675                 5.25442e-05           0                    
+  0.75                  0.000302591           0                    
+  0.825                 0.00120737            0                    
+  0.9                   0.00313978            0                    
+END_DB
+
+BEGIN_DB
+ ICCAP_VAR vd         2              
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  1.56351e-11           0                    
+  0.225                 1.2969e-10            0                    
+  0.3                   1.21431e-09           0                    
+  0.375                 1.14911e-08           0                    
+  0.45                  1.07794e-07           0                    
+  0.525                 9.81666e-07           0                    
+  0.6                   8.27216e-06           0                    
+  0.675                 5.96552e-05           0                    
+  0.75                  0.000339788           0                    
+  0.825                 0.00133054            0                    
+  0.9                   0.00340025            0                    
+END_DB
+
+BEGIN_DB
+ ICCAP_VAR vd         2.5            
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  1.7771e-11            0                    
+  0.225                 1.45766e-10           0                    
+  0.3                   1.36294e-09           0                    
+  0.375                 1.28957e-08           0                    
+  0.45                  1.20968e-07           0                    
+  0.525                 1.10159e-06           0                    
+  0.6                   9.27912e-06           0                    
+  0.675                 6.67558e-05           0                    
+  0.75                  0.000376863           0                    
+  0.825                 0.00145263            0                    
+  0.9                   0.00365598            0                    
+END_DB
+
+BEGIN_DB
+ ICCAP_VAR vd         3              
+ ICCAP_VAR vs         0              
+ ICCAP_VAR vb         0              
+
+ #vg                    id                    ig                   
+  0.15                  1.99157e-11           0                    
+  0.225                 1.61925e-10           0                    
+  0.3                   1.51238e-09           0                    
+  0.375                 1.4308e-08            0                    
+  0.45                  1.34214e-07           0                    
+  0.525                 1.22215e-06           0                    
+  0.6                   1.02915e-05           0                    
+  0.675                 7.3893e-05            0                    
+  0.75                  0.000414093           0                    
+  0.825                 0.00157488            0                    
+  0.9                   0.00391069            0                    
+END_DB
+
