@@ -1,12 +1,15 @@
 import os, sys, argparse, numpy as np, matplotlib
 import matplotlib.pyplot as plt
-import json
+import json, pandas as pd
 
 def save_json(table_dict):
 	# Converts to lists
 	new_table_dict = {}
-	for table_count, table_list in table_dict.items():
-		new_table_dict.update({table_count : table_list.tolist()})
+	for table_count, table_list_dict in table_dict.items():
+		for var_val, table in table_list_dict.items():
+			if table_count not in new_table_dict.keys():
+				new_table_dict.update({table_count : []})
+			new_table_dict[table_count].append(table.tolist())
 
 	# Saves json
 	with open('tables.json', 'w') as jf:
@@ -19,24 +22,27 @@ def plot_tables(table_dict):
 		os.makedirs(out_dir)
 
 	# Goes through all the tables
-	for table_count, table_list in table_dict.items():
+	fig = plt.figure()
+	for table_count, table_list_dict in table_dict.items():
 		# Goes through each table in table_count table_list
-		print(f'Table Count Group: {table_count}\nNumber of Tables: {len(table_list)}')
-		for i, table in enumerate(table_list):
+		print(f'Table Count Group: {table_count}\nNumber of Tables: {len(table_list_dict.keys())}')
+		for i, (var_val, table) in enumerate(table_list_dict.items()):
 			# Plots Vout vs Iout NQ
+			df = pd.DataFrame(table, columns= ['Vout_NQ(real)', 'Iout_Q(real)', 'Iout_NQ(real)', 'Vin_Q(real)', 'Iin_Q(real)', 'Vin_NQ(real)', 'Iin_NQ(real)'])
 			x_l, y_l = 'Vout_NQ(real)', 'Iout_NQ(real)'
 			x_i, y_i = 0, 2
-			fig = plt.figure()
-			plt.plot(table[:, x_i], table[:, y_i])
+			print(f'var_val: {var_val}')
+			plt.plot(table[:, x_i], table[:, y_i], label=str(var_val))
+			plt.text(df['Vout_NQ(real)'].max(), df['Iout_NQ(real)'].max(), str(var_val))
 			fig.suptitle(f'{table_count}: {i+1}')
 			plt.xlabel(x_l)
 			plt.ylabel(y_l)
-			# plt.show()
-			fig.savefig(os.path.join(out_dir, f'{table_count}_{i+1}'))
 			plt.close(fig)
 
 		# Formatting stdout
 		print()
+	plt.show()
+	# fig.savefig(os.path.join(out_dir, 'all.png'))
 
 def print_tables(table_dict):
 	# Goes through table counts
@@ -79,12 +85,14 @@ def parse_mdf(mdf_path):
 				
 				# Adds table to table dict
 				if str(count) not in table_dict.keys():
-					table_dict.update({str(count) : []})
-				table_dict[str(count)].append(np.asarray(table_vals_list))
+					table_dict.update({str(count) : {}})
+				# table_dict[str(count)].append(np.asarray(table_vals_list))
+				table_dict[str(count)].update({var_val : table_vals_list})
 
 		# Converts all to np arrays
-		for table_count, table_list in table_dict.items():
-			table_dict[table_count] = np.asarray(table_dict[table_count])
+		for table_count, table_list_dict in table_dict.items():
+			for var_val, table_list in table_list_dict.items():
+				table_dict[table_count][var_val] = np.asarray(table_dict[table_count][var_val])
 
 		# Table dict
 		return table_dict
