@@ -37,7 +37,6 @@ def plot_tables(table_dict):
 			fig.suptitle(f'{table_count}: {i+1}')
 			plt.xlabel(x_l)
 			plt.ylabel(y_l)
-			# 
 			plt.close(fig)
 
 		# Formatting stdout
