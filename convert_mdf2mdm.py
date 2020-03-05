@@ -37,12 +37,13 @@ def plot_tables(table_dict):
 			fig.suptitle(f'{table_count}: {i+1}')
 			plt.xlabel(x_l)
 			plt.ylabel(y_l)
-			# fig.savefig(os.path.join(out_dir, f'{table_count}_{i+1}'))
+			# 
 			plt.close(fig)
 
 		# Formatting stdout
 		print()
 	plt.show()
+	# fig.savefig(os.path.join(out_dir, 'all.png'))
 
 def print_tables(table_dict):
 	# Goes through table counts
