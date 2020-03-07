@@ -99,33 +99,88 @@ def parse_mdf(mdf_path):
 
 
 def convert_to_mdm(table_dict):
-
+	# Creates mdm from table dict
+	mdm_dict = {}
 	for table_count, table_list_dict in table_dict.items():
+		# mdm list
+		mdm_list = []
 
-		print(f'Table count group : {table_count}\n Num of tables: {len(table_list)}')
-		
-		fname =  str(table_count) + " values " + ".mdm"
-		print(fname)
-		f = open(fname, "w+")
+		# Get vg infor to create header
+		vg_list = table_list_dict.keys()
+		vg_list = [float(f) for f in vg_list]
+		vg_list.sort()
 
-		for i, (var_val, table) in enumerate(table_list_dict.items()):
+		# Calcs vg stuff
+		vg_min, vg_max, vg_num = vg_list[0], vg_list[-1], len(vg_list)
+		vg_step = round((vg_max - vg_min) / vg_num, 3)
+		# print(f'vg: min, max, num, step = {vg_min}, {vg_max}, {vg_num}, {vg_step}')
 
-			print('BEGIN_DB\n')
-			print('	ICCAP_VAR vg :{var_val}\n')
-			print('	ICCAP_VAR vs : 0')
-			print('	ICCAP_VAR vb : 0')
+		# Calcs vd stuff
+		table_list = table_list_dict[vg_list[0]]
+		table_col = [float(f) for f in table_list[:, 0]]
+		vd_min, vd_max, vd_num = 0.05, round(max(table_col) / 10, 1) * 10, len(table_col)
+		vd_step = round((vd_max - vd_min) / vd_num, 3)
+		vd_list = [round(f*vd_step + vd_min, 3) for f in range(vd_num-1)]
+		vd_list.append(vd_max)
+		# print(vd_list)
 
-			print('#vd			id               ig\n')
-			x_i, y_i = 0, 2
-			for vd, iout in zip(table[:, x_i], table[:, y_i]):
-				print(f'')
+		# Creates header
+		header_list = [
+			'! VERSION = 6.00',
+			'BEGIN_HEADER',
+			' ICCAP_INPUTS',
+			f'  vd\tV D GROUND SMU1 0.03 LIN\t1\t{vd_min}\t{vd_max}\t{vd_num}\t{vd_step}',
+			f'  vg\tV G GROUND SMU2 0.01 LIN\t1\t{vg_min}\t{vg_max}\t{vg_num}\t{vg_step}',
+			f'  vs\tV S GROUND GND 0 CON\t0',
+			f'  vb\tV B GROUND GND 0 CON\t0',
+			' ICCAP_OUTPUTS',
+			f'  id\tI D GROUND SMU1 B',
+			f'  ig\tI G GROUND SMU1 B',
+			' ICCAP_VALUES',
+			'  W \"100u\"',
+			'  L \"0.24u\"',
+			'  RcontactDC \"1\"',
+  			'  Rtotalport1 \"1\"',
+			'  Rtotalport2\"1\"',
+			'  TEMP \"27\"',
+			'  TNOM \"27.00\"',
+			'  TIMEDATE \"\"',
+			'  OPERATOR \"\"',
+			'  TECHNO \"myTechno\"',
+			'  LOT \"myLot\"',
+			'  WAFER \"myWafer\"',
+			'  CHIP \"myChip\"',
+			'  MODULE \"myModule\"',
+			'  DEV_NAME \"myDevice\"',
+			'  REMARKS \"my Notes\"',
+			'END_HEADER',
 
+		]
+		# print(header_list)
+		mdm_list += header_list
 
+		# Create DBs
+		for vg in vg_list:
+			# Creates db list and goes though vals
+			db_list = [float(f) for f in table_dict[table_count][vg][:, 2]]
 
+			# Write DB header
+			mdm_list.append('\nBEGIN_DB')
+			mdm_list.append(f' ICCAP_VAR vg\t{vg}')
+			mdm_list.append(f' ICCAP_VAR vs\t0')
+			mdm_list.append(f' ICCAP_VAR vb\t0')
+			mdm_list.append(f'\n#vd\t\tid\t\tig')
 
+			# Writes all id vals from Iout NQ real
+			for vd, id_val in zip(vd_list, db_list):
+				mdm_list.append(f' {vd}\t\t{id_val:e}\t\t0')
+			mdm_list.append('END_DB')
 
+		# Adds to mdm lists
+		mdm_dict.update({table_count : mdm_list})
 
-
+	# Returns dict of mdms
+	return mdm_dict
 
 def parse_args():
 	parser = argparse.ArgumentParser()
@@ -133,16 +188,26 @@ def parse_args():
 	parser.add_argument('-o', '--output', help='output mdm file path', type=str)
 	return parser.parse_args()
 
+def write_mdm(mdm_dict):
+	# Writes mdm files
+	for table_count, mdm_list in mdm_dict.items():
+		# Creates file name and writes file
+		fname = f'{table_count}.mdm'
+		with open(fname, 'w') as of:
+			of.write('\n'.join(mdm_list))
+
 def main():
 	# Gets args
 	args = parse_args()
 
 	# Parses mdf file to np arrays
 	table_dict = parse_mdf(args.input)
-	plot_tables(table_dict)
-	save_json(table_dict)
+	# plot_tables(table_dict)
+	# save_json(table_dict)
+	mdm_dict = convert_to_mdm(table_dict)
 
-	convert_to_mdm(table_dict)
+	# Writes mdms
+	write_mdm(mdm_dict)
 
 if __name__ == '__main__':
 	main()
